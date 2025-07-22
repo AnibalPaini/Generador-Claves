@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { eliminarDiacriticos } from "../utils.js";
+import zxcvbn from 'zxcvbn';
 
 const palabrasRouter = Router();
 
@@ -27,8 +28,10 @@ palabrasRouter.get("/contrasena", async (req, res) => {
       clave += conjunto[indice];
     }
   } 
+  let fuerza = zxcvbn(clave).score;
+  let mensjae= zxcvbn(clave).feedback 
 
-  res.send(clave);
+  res.status(200).json({payload:clave, fuerza:fuerza, mensaje: mensjae });
 });
 
 palabrasRouter.get("/random", async (req, res) => {
